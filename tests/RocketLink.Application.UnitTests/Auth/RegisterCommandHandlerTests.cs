@@ -2,10 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using RocketLink.Application.DTOs;
-using RocketLink.Application.Features.Auth.Login;
 using RocketLink.Application.Features.Auth.Register;
 using RocketLink.Application.Interfaces;
-using RocketLink.Domain.Entities;
 using RocketLink.Persistence.Contexts;
 
 namespace RocketLink.Application.UnitTests.Auth;
@@ -44,11 +42,48 @@ public class RegisterCommandHandlerTests
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
-
         await ClearDb(_context);
 
+        // Assert
         Assert.IsTrue(result.IsSuccess);
         Assert.NotNull(result.Value);
+    }
+
+    [Test]
+    public void Handle_ShouldReturnValidationError_WhenEmailIsInvalid()
+    {
+        // Arrange
+        var command = new RegisterCommand
+        {
+            Username = "validuser",
+            Email = "invalid-email",
+            Password = "validpassword"
+        };
+
+        var validator = new RegisterCommandValidator();
+        var validationResult = validator.Validate(command);
+
+        // Assert
+        Assert.IsFalse(validationResult.IsValid);
+    }
+
+    [Test]
+    public void Handle_ShouldReturnValidationError_WhenUsernameIsEmpty()
+    {
+        // Arrange
+        var command = new RegisterCommand
+        {
+            Username = "",
+            Email = "user@example.com",
+            Password = "validpassword"
+        };
+
+        // Act
+        var validator = new RegisterCommandValidator();
+        var validationResult = validator.Validate(command);
+
+        // Assert
+        Assert.IsFalse(validationResult.IsValid);
     }
 
     public static async Task ClearDb(IApplicationDbContext context)
