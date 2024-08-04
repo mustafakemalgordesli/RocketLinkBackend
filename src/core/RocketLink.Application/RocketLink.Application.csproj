@@ -22,4 +22,8 @@
     <ProjectReference Include="..\RocketLink.Domain\RocketLink.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Links\" />
+  </ItemGroup>
+
 </Project>

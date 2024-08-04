@@ -25,7 +25,7 @@ public class LoginCommandHandler(IApplicationDbContext context, IJwtService jwtS
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email || x.Username == request.Email);
 
-        if (user == default) return Result<AuthResponse>.Failure(new Error("User.NotFound", "User not found!"));
+        if (user is null) return Result<AuthResponse>.Failure(new Error("User.NotFound", "User not found!"));
 
         if(!BCrypt.Net.BCrypt.Verify(request.Password, user.Password)) return Result<AuthResponse>.Failure(new Error("User.PasswordWrong", "Password is wrong!"));
 
