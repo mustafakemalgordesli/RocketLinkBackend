@@ -6,16 +6,17 @@ using RocketLink.Application.Mapping;
 using RocketLink.Domain.Common;
 using RocketLink.Domain.Entities;
 
-namespace RocketLink.Application.Features.Users.Queries.GetByUsername;
+namespace RocketLink.Application.Features.Users.Queries.GetById;
 
-public record GetByUsernameQuery(string username) : IRequest<Result<UserDTO>>;
 
-public class GetByUsernameQueryHandler(IApplicationDbContext context) : IRequestHandler<GetByUsernameQuery, Result<UserDTO>>
+public record GetByIdQuery(Guid id) : IRequest<Result<UserDTO>>;
+
+public class GetByUsernameQueryHandler(IApplicationDbContext context) : IRequestHandler<GetByIdQuery, Result<UserDTO>>
 {
     private readonly IApplicationDbContext _context = context;
-    public async Task<Result<UserDTO>> Handle(GetByUsernameQuery request, CancellationToken cancellationToken)
+    public async Task<Result<UserDTO>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.username && x.IsDeleted == false);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.id && x.IsDeleted == false);
 
         if (user is null) return Result<UserDTO>.Failure(new Error("User.NotFound", "User not found!"));
 

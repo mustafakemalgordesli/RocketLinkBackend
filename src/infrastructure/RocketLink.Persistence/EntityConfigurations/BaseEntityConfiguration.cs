@@ -10,7 +10,5 @@ public class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> where T : 
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
-        builder.Property(x => x.CreatedAt).ValueGeneratedOnAdd();
-        builder.Property(x => x.IsDeleted).ValueGeneratedOnAdd();
     }
 }
