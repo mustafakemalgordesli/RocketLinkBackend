@@ -56,5 +56,26 @@ namespace RocketLink.API.Controllers
 
             return Ok(result);
         }
+
+        
+        [HttpGet("GetLinksByToken")]
+        [Authorize]
+        public async Task<IActionResult> GetAllByToken()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+
+            var res = await _mediator.Send(new GetByIdQuery(new Guid(userIdClaim)));
+
+            if (!res.IsSuccess) return BadRequest(res);
+
+            var result = await _mediator.Send(new GetAllLinkByUserQuery(res.Value.Id, false));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
     }
 }

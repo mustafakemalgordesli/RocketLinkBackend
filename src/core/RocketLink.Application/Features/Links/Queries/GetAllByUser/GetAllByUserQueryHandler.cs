@@ -16,7 +16,7 @@ public class GetAllByUserQueryHandler(IApplicationDbContext context) : IRequestH
 
     public Task<Result<List<LinkDTO>>> Handle(GetAllLinkByUserQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<Link> queryable = _context.Links.AsQueryable().Where(x => x.IsActive == request.isActive && x.UserId == request.userId && x.IsDeleted == false);
+        IQueryable<Link> queryable = _context.Links.AsQueryable().Where(x => (request.isActive == true ? x.IsActive == true : true) && x.UserId == request.userId && x.IsDeleted == false);
 
         List<LinkDTO> list = new List<LinkDTO>();
 
