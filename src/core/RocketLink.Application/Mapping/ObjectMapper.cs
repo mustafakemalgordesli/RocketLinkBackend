@@ -20,4 +20,30 @@ public class ObjectMapper
 
         return dto;
     }
+
+    public static TTarget UpdateProperties<TSource, TTarget>(TSource source, TTarget target)
+    {
+        if (source == null || target == null)
+            throw new ArgumentNullException("Source and target objects must not be null.");
+
+        var sourceType = source.GetType();
+        var targetType = target.GetType();
+
+        foreach (var property in sourceType.GetProperties())
+        {
+            var sourceValue = property.GetValue(source);
+
+            if (sourceValue != null)
+            {
+                var targetProperty = targetType.GetProperty(property.Name);
+                if (targetProperty != null && targetProperty.CanWrite)
+                {
+                    targetProperty.SetValue(target, sourceValue);
+                }
+            }
+        }
+
+        return target;
+    }
 }
+

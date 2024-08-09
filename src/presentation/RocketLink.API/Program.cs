@@ -2,6 +2,7 @@ using RocketLink.API.Extensions;
 using RocketLink.Persistence;
 using Microsoft.OpenApi.Models;
 using RocketLink.Application;
+using RocketLink.Infrastructure;
 using RocketLink.Persistence.Contexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.ConfigureCors(MyAllowSpecificOrigins);
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddInfrastructure();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
@@ -76,6 +78,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles();
 
 app.UseCors(MyAllowSpecificOrigins);
 

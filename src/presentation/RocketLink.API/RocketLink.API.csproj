@@ -24,4 +24,8 @@
     <ProjectReference Include="..\..\infrastructure\RocketLink.Persistence\RocketLink.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>

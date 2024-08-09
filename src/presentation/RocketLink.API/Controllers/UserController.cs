@@ -1,9 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RocketLink.Application.Features.Users.Commands.UploadImage;
 using RocketLink.Application.Features.Users.Queries.CheckEmailInUse;
 using RocketLink.Application.Features.Users.Queries.CheckUsernamelInUse;
 using RocketLink.Application.Features.Users.Queries.GetById;
+using RocketLink.Domain.Common;
 
 namespace RocketLink.API.Controllers
 {
@@ -11,6 +13,7 @@ namespace RocketLink.API.Controllers
     [ApiController]
     public class UserController(IMediator mediator) : ControllerBase
     {
+
         private readonly IMediator _mediator = mediator;
 
         [Authorize]
@@ -36,6 +39,17 @@ namespace RocketLink.API.Controllers
         public async Task<IActionResult> CheckUsernameInUse([FromQuery] string Username)
         {
             var result = await _mediator.Send(new CheckUsernameInUseQuery(Username));
+
+            return Ok(result);
+        }
+
+        [HttpPost("upload")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+
+            var result = await _mediator.Send(new UploadImageCommand(new Guid(userIdClaim), file));
 
             return Ok(result);
         }

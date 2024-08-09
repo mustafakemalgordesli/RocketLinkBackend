@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RocketLink.Persistence.Contexts;
@@ -11,9 +12,11 @@ using RocketLink.Persistence.Contexts;
 namespace RocketLink.Persistence.Migrations
 {
     [DbContext(typeof(RocketLinkDbContext))]
-    partial class RocketLinkDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240809175722_UpdateModels")]
+    partial class UpdateModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,9 +80,6 @@ namespace RocketLink.Persistence.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<string>("Fullname")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
