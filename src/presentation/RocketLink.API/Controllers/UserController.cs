@@ -24,6 +24,11 @@ namespace RocketLink.API.Controllers
 
             var result = await _mediator.Send(new GetByIdQuery(new Guid(userIdClaim)));
 
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
             return Ok(result);
         }
 
@@ -31,6 +36,11 @@ namespace RocketLink.API.Controllers
         public async Task<IActionResult> CheckEmailInUse([FromQuery] string Email)
         {
             var result = await _mediator.Send(new CheckEmailInUseQuery(Email));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
 
             return Ok(result);
         }
@@ -40,16 +50,26 @@ namespace RocketLink.API.Controllers
         {
             var result = await _mediator.Send(new CheckUsernameInUseQuery(Username));
 
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
             return Ok(result);
         }
 
-        [HttpPost("upload")]
         [Authorize]
-        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage([FromForm]IFormFile file)
         {
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
             var result = await _mediator.Send(new UploadImageCommand(new Guid(userIdClaim), file));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
 
             return Ok(result);
         }
