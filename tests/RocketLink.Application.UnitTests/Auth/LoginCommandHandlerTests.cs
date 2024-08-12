@@ -4,7 +4,6 @@ using Moq;
 using RocketLink.Application.DTOs;
 using RocketLink.Application.Features.Auth.Login;
 using RocketLink.Application.Interfaces;
-using RocketLink.Domain.Entities;
 using RocketLink.Persistence.Contexts;
 
 
@@ -50,7 +49,7 @@ public class LoginCommandHandlerTests
     {
         // Arrange
 
-        var user = new User
+        var user = new Domain.Entities.User
         {
             Email = "test@example.com",
             Username = "test",
@@ -81,7 +80,7 @@ public class LoginCommandHandlerTests
     {
         // Arrange
 
-        var user = new User
+        var user = new Domain.Entities.User
         {
             Email = "test@example.com",
             Username = "test",
@@ -111,7 +110,7 @@ public class LoginCommandHandlerTests
     public async Task Handle_ShouldReturnFailure_WhenPasswordIsWrong()
     {
         // Arrange
-        var user = new User
+        var user = new Domain.Entities.User
         {
             Email = "test@example.com",
             Username = "test",

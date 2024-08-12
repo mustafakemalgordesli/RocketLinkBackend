@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RocketLink.Application.Features.Users.Commands.UpdateUser;
 using RocketLink.Application.Features.Users.Commands.UploadImage;
 using RocketLink.Application.Features.Users.Queries.CheckEmailInUse;
 using RocketLink.Application.Features.Users.Queries.CheckUsernamelInUse;
 using RocketLink.Application.Features.Users.Queries.GetById;
+using RocketLink.Application.Features.Users.Queries.GetByUsername;
 using RocketLink.Domain.Common;
 
 namespace RocketLink.API.Controllers
@@ -23,6 +25,21 @@ namespace RocketLink.API.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
             var result = await _mediator.Send(new GetByIdQuery(new Guid(userIdClaim)));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [HttpGet("GetUserByUsername")]
+        public async Task<IActionResult> GetUserByUsername([FromQuery] string username)
+        {
+            var query = new GetByUsernameQuery(username);
+
+            var result = await _mediator.Send(query);
 
             if (!result.IsSuccess)
             {
@@ -66,6 +83,23 @@ namespace RocketLink.API.Controllers
 
             var result = await _mediator.Send(new UploadImageCommand(new Guid(userIdClaim), file));
 
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser([FromBody]UpdateUserCommand command)
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+            command.Id = new Guid(userIdClaim);
+
+            var result = await _mediator.Send(command);
+            
             if (!result.IsSuccess)
             {
                 return BadRequest(result);
