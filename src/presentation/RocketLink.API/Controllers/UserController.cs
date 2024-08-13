@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RocketLink.Application.Features.Users.Commands.RemoveUser;
 using RocketLink.Application.Features.Users.Commands.UpdateUser;
 using RocketLink.Application.Features.Users.Commands.UploadImage;
 using RocketLink.Application.Features.Users.Queries.CheckEmailInUse;
@@ -25,6 +26,23 @@ namespace RocketLink.API.Controllers
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
 
             var result = await _mediator.Send(new GetByIdQuery(new Guid(userIdClaim)));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
+        }
+
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<IActionResult> RemoveUser()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+
+            var result = await _mediator.Send(new RemoveUserCommand(new Guid(userIdClaim)));
 
             if (!result.IsSuccess)
             {
