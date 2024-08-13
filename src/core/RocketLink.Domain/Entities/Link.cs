@@ -9,5 +9,6 @@ public class Link : BaseEntity
     public string Url { get; set; }
     public string? IconCode { get; set; }
     public bool IsActive { get; set; } = true;
+    public int ClickCount { get; set; } = 0;
     public User User { get; set; }
 }

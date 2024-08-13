@@ -20,6 +20,12 @@ public class GetByUsernameQueryHandler(IApplicationDbContext context) : IRequest
 
         if (user is null) return Result<UserDTO>.Failure(new Error("User.NotFound", "User not found!"));
 
+        user.ViewsCount++;
+
+        _context.Users.Update(user);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
         return Result<UserDTO>.Success(ObjectMapper.MapGeneric<User, UserDTO>(user));
     }
 }

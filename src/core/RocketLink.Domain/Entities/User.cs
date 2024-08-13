@@ -9,5 +9,6 @@ public class User : BaseEntity
     public string Username { get; set; }
     public string Email { get; set; }
     public string Password { get; set; }
+    public int ViewsCount { get; set; } = 0;
     public virtual ICollection<Link> Links { get; set; }
 }

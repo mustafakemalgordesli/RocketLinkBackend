@@ -1,12 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RocketLink.Application.Features.Links.Commands.CreateLink;
+using RocketLink.Application.Features.Links.Commands.IncreaseClickCount;
 using RocketLink.Application.Features.Links.Commands.RemoveLink;
 using RocketLink.Application.Features.Links.Commands.UpdateLink;
 using RocketLink.Application.Features.Links.Queries.GetAllByUser;
-using RocketLink.Application.Features.Users.Commands.RemoveUser;
 using RocketLink.Application.Features.Users.Queries.GetById;
 using RocketLink.Application.Features.Users.Queries.GetByUsername;
 using RocketLink.Domain.Common;
@@ -106,6 +105,19 @@ namespace RocketLink.API.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPost("increase/{id}")]
+        public async Task<IActionResult> IncreaseClickCount([FromRoute]string id)
+        {
+            var result = await _mediator.Send(new IncreaseCountCommand(new Guid(id)));
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
