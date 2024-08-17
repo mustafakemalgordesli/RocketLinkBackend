@@ -7,6 +7,7 @@ public class Link : BaseEntity
     public string Title { get; set; }
     public Guid UserId { get; set; }
     public string Url { get; set; }
+    public int? Priority { get; set; }
     public string? IconCode { get; set; }
     public bool IsActive { get; set; } = true;
     public int ClickCount { get; set; } = 0;

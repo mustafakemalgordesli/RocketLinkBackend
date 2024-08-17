@@ -5,6 +5,7 @@ using RocketLink.Application.Features.Links.Commands.CreateLink;
 using RocketLink.Application.Features.Links.Commands.IncreaseClickCount;
 using RocketLink.Application.Features.Links.Commands.RemoveLink;
 using RocketLink.Application.Features.Links.Commands.UpdateLink;
+using RocketLink.Application.Features.Links.Commands.UpdatePriority;
 using RocketLink.Application.Features.Links.Queries.GetAllByUser;
 using RocketLink.Application.Features.Users.Queries.GetById;
 using RocketLink.Application.Features.Users.Queries.GetByUsername;
@@ -118,6 +119,20 @@ namespace RocketLink.API.Controllers
             }
 
             return Ok();
+        }
+
+        [Authorize]
+        [HttpPost("priority")]
+        public async Task<IActionResult> UpdatePriority(UpdatePriorityCommand command)
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+
+            return Ok(result);
         }
     }
 }
