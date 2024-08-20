@@ -11,21 +11,35 @@ public class UpdatePriorityCommandHandler(IApplicationDbContext context) : IRequ
     private readonly IApplicationDbContext _context = context;
     public async Task<Result> Handle(UpdatePriorityCommand request, CancellationToken cancellationToken)
     {
-        var links = await _context.Links
-            .Where(link => request.ids.Contains(link.Id))
-            .ToListAsync(cancellationToken);
-
-        for (int i = 0; i < request.ids.Count; i++)
+        using (var transaction = await context.Database.BeginTransactionAsync())
         {
-            var link = links.FirstOrDefault(l => l.Id == request.ids[i]);
-            if (link != null)
+            try
             {
-                link.Priority = i + 1; 
+                var links = await _context.Links
+                    .Where(link => request.ids.Contains(link.Id))
+                    .ToListAsync(cancellationToken);
+
+                for (int i = 0; i < request.ids.Count; i++)
+                {
+                    var link = links.FirstOrDefault(l => l.Id == request.ids[i]);
+                    if (link != null)
+                    {
+                        link.Priority = i + 1;
+                    }
+                }
+
+                await _context.SaveChangesAsync(cancellationToken);
+
+                transaction.Commit();
+
+                return Result.Success();
+
             }
+            catch
+            {
+                transaction.Rollback();
+            }
+            return Result.Failure(new Error("link", "Link not updated"));
         }
-
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return Result.Success();
     }
 }

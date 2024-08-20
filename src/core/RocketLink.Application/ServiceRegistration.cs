@@ -18,5 +18,6 @@ public static class ServiceRegistration
         services.AddScoped<IJwtService, JwtService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestLoggingPipelineBehavior<,>));
     }
 }
