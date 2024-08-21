@@ -16,6 +16,8 @@ public class UserConfiguration : BaseEntityConfiguration<User>
         builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Email).IsRequired().HasMaxLength(255);
 
+        builder.HasQueryFilter(x => x.IsDeleted == false);
+
         builder.ToTable("users", RocketLinkDbContext.DEFAULT_SCHEMA);
     }
 }

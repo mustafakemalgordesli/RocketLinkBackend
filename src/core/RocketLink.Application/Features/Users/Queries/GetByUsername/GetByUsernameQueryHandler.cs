@@ -16,7 +16,7 @@ public class GetByUsernameQueryHandler(IApplicationDbContext context) : IRequest
     private readonly IApplicationDbContext _context = context;
     public async Task<Result<UserDTO>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.id && x.IsDeleted == false);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.id);
 
         if (user is null) return Result<UserDTO>.Failure(new Error("User.NotFound", "User not found!"));
 

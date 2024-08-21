@@ -12,7 +12,7 @@ public class IncreaseClickCountCommandHandler(IApplicationDbContext context) : I
     private readonly IApplicationDbContext _context = context;
     public async Task<Result> Handle(IncreaseCountCommand request, CancellationToken cancellationToken)
     {
-        var link = await _context.Links.FirstOrDefaultAsync(x => x.Id == request.id && x.IsDeleted == false);
+        var link = await _context.Links.FirstOrDefaultAsync(x => x.Id == request.id);
 
         if (link == null) return Result<Guid>.Failure(new Error("link", "Link not found"));
 

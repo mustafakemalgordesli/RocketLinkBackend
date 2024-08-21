@@ -26,7 +26,7 @@ public class UpdateLinkCommandHandler(IApplicationDbContext context) : IRequestH
 
     public async Task<Result<Guid>> Handle(UpdateLinkCommand request, CancellationToken cancellationToken)
     {
-        var existLink = await _context.Links.FirstOrDefaultAsync(x => x.Id == request.Id && x.IsDeleted == false);
+        var existLink = await _context.Links.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (existLink == null) return Result<Guid>.Failure(new Error("link", "Link not found"));
 

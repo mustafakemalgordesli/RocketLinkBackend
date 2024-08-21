@@ -12,7 +12,7 @@ public class CheckUsernameInUseQueryHandler(IApplicationDbContext context) : IRe
     private readonly IApplicationDbContext _context = context;
     public async Task<Result> Handle(CheckUsernameInUseQuery request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.Username && x.IsDeleted == false);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == request.Username);
 
         if (user != default) return Result.Failure(new Error("username", "Username is already taken"));
 

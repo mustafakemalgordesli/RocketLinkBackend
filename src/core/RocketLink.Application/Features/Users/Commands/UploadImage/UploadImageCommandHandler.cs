@@ -18,7 +18,7 @@ public class UploadImageCommandHandler(IFileService fileService, IApplicationDbC
     IApplicationDbContext _context = context;
     public async Task<Result<string>> Handle(UploadImageCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.userId && x.IsDeleted == false);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.userId);
 
         if (user == null) return Result<string>.Failure(new Error("user", "User not found!"));
 

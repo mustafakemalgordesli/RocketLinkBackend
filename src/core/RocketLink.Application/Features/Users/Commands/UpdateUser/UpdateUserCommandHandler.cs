@@ -17,7 +17,7 @@ public class UpdateUserCommandHandler(IApplicationDbContext context) : IRequestH
     private readonly IApplicationDbContext _context = context;
     public async Task<Result<Guid>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var updatedUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id && x.IsDeleted == false);
+        var updatedUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id);
 
         if (updatedUser == null) return Result<Guid>.Failure(new Error("user", "User not found"));
 

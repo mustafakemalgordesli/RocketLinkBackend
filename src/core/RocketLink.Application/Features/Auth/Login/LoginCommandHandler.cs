@@ -23,7 +23,7 @@ public class LoginCommandHandler(IApplicationDbContext context, IJwtService jwtS
 
     public async Task<Result<AuthResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => (x.Email == request.Email || x.Username == request.Email) && x.IsDeleted == false);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email || x.Username == request.Email);
 
         if (user is null) return Result<AuthResponse>.Failure(new Error("User.NotFound", "User not found!"));
 

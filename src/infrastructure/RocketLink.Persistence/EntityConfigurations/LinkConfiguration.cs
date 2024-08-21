@@ -15,6 +15,8 @@ public class LinkConfiguration : BaseEntityConfiguration<Link>
         builder.Property(x => x.UserId).IsRequired();
         builder.Property(x => x.Url).IsRequired();
 
+        builder.HasQueryFilter(x => x.IsDeleted == false);
+
         builder.ToTable("links", RocketLinkDbContext.DEFAULT_SCHEMA);
     }
 }

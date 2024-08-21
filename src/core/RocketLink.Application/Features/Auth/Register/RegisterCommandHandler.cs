@@ -31,7 +31,7 @@ public class RegisterCommandHandler(IApplicationDbContext context, IJwtService j
             return Result<AuthResponse>.Failure(new Error("username", "Invalid username"));
         }
 
-        var existUser = await _context.Users.FirstOrDefaultAsync(x => (x.Email == request.Email || x.Username == request.Email) && x.IsDeleted == false);
+        var existUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email || x.Username == request.Email);
 
         if (existUser is not null) return Result<AuthResponse>.Failure(new Error("username", "User already exists"));
 
